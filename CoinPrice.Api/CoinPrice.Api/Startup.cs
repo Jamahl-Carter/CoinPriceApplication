@@ -1,3 +1,8 @@
+using System;
+using System.Linq;
+using CoinPrice.Business.Configuration;
+using CoinPrice.Common.Configuration;
+using CoinPrice.Data.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -18,6 +23,11 @@ namespace CoinPrice.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            // Configure service dependencies
+            services.AddBusinessDependencies();
+            services.AddCommonDependencies(Configuration);
+            services.AddDataDependencies();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

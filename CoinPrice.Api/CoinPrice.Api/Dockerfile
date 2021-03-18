@@ -12,6 +12,12 @@ COPY . .
 WORKDIR "/src/CoinPrice.Api"
 RUN dotnet build "CoinPrice.Api.csproj" -c Release -o /app/build
 
+FROM build AS test
+WORKDIR "/src/CoinPrice.Business.Test"
+RUN dotnet test -c Release -o /test
+WORKDIR "/src/CoinPrice.Data.Test"
+RUN dotnet test -c Release -o /test
+
 FROM build AS publish
 RUN dotnet publish "CoinPrice.Api.csproj" -c Release -o /app/publish
 

@@ -14,5 +14,9 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CoinPrice.Business\CoinPrice.Business.csproj" />
+  </ItemGroup>
+
 
 </Project>
