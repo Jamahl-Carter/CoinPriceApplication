@@ -26,6 +26,7 @@
   "eslintConfig": {
     "extends": "react-app"
   },
+  "proxy": "http://coinprice.api:80",
   "browserslist": {
     "production": [
       ">0.2%",

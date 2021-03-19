@@ -1,0 +1,29 @@
+version: '3.4'
+
+services:
+  coinprice.ui:
+    image: coinprice.ui
+    container_name: coinprice-ui
+    ports:
+      - "3000:3000"
+    build:
+      context: ./CoinPrice.Ui
+      dockerfile: Dockerfile.dev # use dev build
+    stdin_open: true
+    volumes:
+       - ./CoinPrice.Ui:/usr/src/app/CoinPrice.Ui
+       - /usr/src/app/CoinPrice.Ui/node_modules
+    depends_on:
+      - coinprice.api
+  coinprice.api:
+    image: ${DOCKER_REGISTRY-}coinpriceapi
+    container_name: coinprice-api
+    environment:
+      - CORS=http://localhost:3000
+    expose:
+      - 80
+    ports:
+      - "8081:80"
+    build:
+      context: ./CoinPrice.Api
+      dockerfile: ./CoinPrice.Api/Dockerfile

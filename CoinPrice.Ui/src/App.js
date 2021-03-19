@@ -16,15 +16,19 @@ function App() {
   const [state, setCoinDetails] = useState({
     CoinType: 'BTC',
     Ask: 0.0,
-    PercentageChanged: '0%'
+    PercentageChanged: '0%',
   });
+  const baseApiUrl =
+    process.env.NODE_ENV === 'production'
+      ? 'https://coin-price-api.azurewebsites.net'
+      : ''; // name resolved to http://coinprice.api:80 from proxy config
 
   // Handler to refresh price for preferred coin
   const refreshHandler = async () => {
     // Pull price data for preferred coin
-    const response = await fetch(
-      `https://coin-price-api.azurewebsites.net/api/price`
-    ).then(resp => resp.json());
+    const response = await fetch(`${baseApiUrl}/api/price`).then(resp =>
+      resp.json()
+    );
 
     // Calculate percentage changed
     const percentageChanged =
@@ -34,7 +38,8 @@ function App() {
     const result = {
       CoinType: response.coinType,
       Ask: response.ask,
-      PercentageChanged: `${percentageChanged}%`,
+      PercentageChanged:
+        response.coinType === state.CoinType ? `${percentageChanged}%` : '0%',
     };
     setCoinDetails(result);
 
@@ -46,11 +51,8 @@ function App() {
     const options = {
       method: 'PUT',
     };
-    await fetch(
-      `https://coin-price-api.azurewebsites.net/api/user/${values.CoinType}`,
-      options
-    );
-    setCoinDetails({...state, ...{PercentageChanged: '0%'}}) // changing preference reset %
+    await fetch(`${baseApiUrl}/api/user/${values.CoinType}`, options);
+    setCoinDetails({ ...state, ...{ PercentageChanged: '0%' } }); // changing preference reset %
   };
 
   // Populate form on load
