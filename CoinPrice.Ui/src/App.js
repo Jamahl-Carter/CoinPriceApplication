@@ -69,7 +69,9 @@ function App() {
         <Formik
           initialValues={{ ...state }}
           onSubmit={(values, { setSubmitting }) => {
-            setPreferredHandler(values).then(_ => setSubmitting(false));
+            setPreferredHandler(values).then(_ =>
+              refreshHandler().then(_ => setSubmitting(false))
+            );
           }}
           enableReinitialize
         >
