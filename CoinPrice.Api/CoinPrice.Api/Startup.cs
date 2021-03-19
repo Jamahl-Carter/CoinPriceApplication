@@ -28,6 +28,7 @@ namespace CoinPrice.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CoinPriceChecker.Api", Version = "v1" });
@@ -56,6 +57,14 @@ namespace CoinPrice.Api
         {
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
+
+            // Configure CORS
+            app.UseCors(options =>
+            {
+                string supportedOrigins = Configuration.GetValue<string>("CORS");
+
+                options.WithOrigins(supportedOrigins).AllowAnyMethod();
+            });
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>
